@@ -1,0 +1,49 @@
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="DemSum"
+displayURL="https://github.com/DemSum/Maidsoul-Brewery-Public"
+issueTrackerURL="https://github.com/DemSum/Maidsoul-Brewery-Public/issues"
+description='''
+Unofficial compatibility patch for Maidsoul Kitchen and DrinkBeer Refill beer barrels.
+This public package does not include DrinkBeer Refill recipe override data.
+
+非官方兼容补丁，用于修复 Maidsoul Kitchen 与 DrinkBeer Refill 啤酒桶任务的兼容问题。
+公开版不包含 DrinkBeer Refill 配方覆盖数据。
+'''
+
+[[mixins]]
+config="${mod_id}.mixins.json"
+
+[[dependencies.${mod_id}]]
+modId="neoforge"
+type="required"
+versionRange="${neo_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+type="required"
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="maidsoulkitchen"
+type="required"
+versionRange="${maidsoulkitchen_version_range}"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="drinkbeer"
+type="required"
+versionRange="${drinkbeer_version_range}"
+ordering="AFTER"
+side="BOTH"
