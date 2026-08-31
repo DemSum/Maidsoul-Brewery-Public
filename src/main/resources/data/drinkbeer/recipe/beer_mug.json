@@ -1,0 +1,41 @@
+{
+  "type": "drinkbeer:brewing",
+  "ingredients": [
+    [
+      {
+        "item": "minecraft:wheat"
+      },
+      {
+        "tag": "c:crops/wheat"
+      }
+    ],
+    [
+      {
+        "item": "minecraft:wheat"
+      },
+      {
+        "tag": "c:crops/wheat"
+      }
+    ],
+    [
+      {
+        "item": "minecraft:wheat"
+      },
+      {
+        "tag": "c:crops/wheat"
+      }
+    ],
+    {
+      "tag": "maidsoul_brewery:drinkbeer_water_inputs"
+    }
+  ],
+  "cup": {
+    "id": "drinkbeer:empty_beer_mug",
+    "count": 4
+  },
+  "brewing_time": 24000,
+  "result": {
+    "id": "drinkbeer:beer_mug",
+    "count": 4
+  }
+}
