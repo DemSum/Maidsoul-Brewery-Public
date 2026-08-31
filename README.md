@@ -1,53 +1,19 @@
 # MaidSoul Brewery
 
-Unofficial compatibility patch for Minecraft 1.21.1 NeoForge.
+MaidSoul Brewery is an unofficial NeoForge 1.21.1 compatibility patch for Maidsoul Kitchen and DrinkBeer Refill.
+Fix the issue where Maidsoul Kitchen reports the `drinkbeer` beer barrel cooking task as incompatible.
+DrinkBeer Refill recipe compatibility patches for Kitchen Karrot and **Create: Ratatouille** will be released after permission.
 
-MaidSoul Brewery currently targets DrinkBeer Refill compatibility only. It patches the gap where the current Maidsoul Kitchen release cannot directly handle DrinkBeer Refill beer barrels, without modifying, bundling, or redistributing upstream jars.
-
-当前仅适配 DrinkBeer Refill。现版本 Maidsoul Kitchen 还无法直接适配 DrinkBeer Refill 的啤酒桶，本项目通过最小 Mixin patch 补齐兼容，不修改、不内置、不再分发上游 jar。
-
-The public version prevents MSK maid beer-barrel tasks from pulling brewing ingredients back out and adds the small barrel bridge expected by MSK.
-
-公开版会避免 MSK 女仆从啤酒桶输入槽取走酿造原料，并补齐 MSK 需要的啤酒桶桥接逻辑。
-
-No DrinkBeer Refill recipe overrides or upstream recipe data are included in this public repository.
-
-公开仓库不包含 DrinkBeer Refill 配方覆盖，也不包含上游配方数据。
-
-## Temporarily Removed Patches / 暂时移除的补丁
-
-The public version temporarily removes DrinkBeer Refill recipe compatibility patches for Kitchen Karrot and **Create: Ratatouille**.
-
-公开版暂时移除了 DrinkBeer Refill 配方与 Kitchen Karrot、**Create: Ratatouille** 的兼容 patch。
-
-These patches will be updated in the public version after recipe-data redistribution permission is confirmed.
-
-取得配方数据再分发授权后，公开版会更新这些内容。
-
-## Compatibility / 兼容范围
-
-- Minecraft 1.21.1
-- NeoForge
-- Maidsoul Kitchen
-- DrinkBeer Refill
+MaidSoul Brewery 是面向 Maidsoul Kitchen 与 DrinkBeer Refill 的非官方 NeoForge 1.21.1 兼容补丁。
+修复 Maidsoul Kitchen 将 `drinkbeer` 啤酒桶烹饪任务报告为不兼容的问题。
+DrinkBeer Refill 与 Kitchen Karrot、**Create: Ratatouille** 的配方兼容 patch 会在确认授权后发布。
 
 ## Planned / 计划中
 
-- Compatibility patches for more brewing-related mods
+- Kitchen Karrot and **Create: Ratatouille** recipe compatibility patch after permission is confirmed
+- More brewing-related mod compatibility patches
 - Vanilla brewing stand compatibility
-
-## Notes / 说明
-
-This is not an official Maidsoul Kitchen or DrinkBeer Refill project.
-
-本项目不是 Maidsoul Kitchen 或 DrinkBeer Refill 的官方项目。
-
-Private builds may contain local-only recipe compatibility data. Public builds exclude that content unless redistribution permission is confirmed.
-
-私人版可能包含仅限本地使用的配方兼容数据。公开版默认排除这类内容，除非后续确认再分发授权。
 
 ## License / 许可证
 
 MIT License.
-
-Copyright (c) 2026 DemSum.
