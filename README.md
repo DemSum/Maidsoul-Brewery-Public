@@ -14,6 +14,23 @@ No DrinkBeer Refill recipe overrides or upstream recipe data are included in thi
 
 公开仓库不包含 DrinkBeer Refill 配方覆盖，也不包含上游配方数据。
 
+## Temporarily Removed Recipes / 暂时移除的配方
+
+The public version temporarily removes compatibility overrides for these DrinkBeer Refill recipes:
+
+- `drinkbeer:beer_mug`
+- `drinkbeer:beer_mug_apple_lambic`
+- `drinkbeer:beer_mug_blaze_milk_stout`
+- `drinkbeer:beer_mug_blaze_stout`
+- `drinkbeer:beer_mug_frothy_pink_eggnog`
+- `drinkbeer:beer_mug_night_howl_kvass`
+- `drinkbeer:beer_mug_pumpkin_kvass`
+- `drinkbeer:beer_mug_sweet_berry_kriek`
+
+These overrides will be updated in the public version after recipe-data redistribution permission is confirmed.
+
+公开版暂时移除了以上 DrinkBeer Refill 配方的兼容覆盖。取得配方数据再分发授权后，公开版会更新这些内容。
+
 ## Compatibility / 兼容范围
 
 - Minecraft 1.21.1
