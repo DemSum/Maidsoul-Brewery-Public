@@ -7,6 +7,9 @@
       },
       {
         "tag": "c:crops/wheat"
+      },
+      {
+        "tag": "maidsoul_brewery:drinkbeer_wheat_inputs"
       }
     ],
     {
