@@ -1,5 +1,18 @@
 # Changelog / 更新日志
 
+## 0.2.0 - 2026-09-02
+
+### Added / 新增
+
+- Added Farmer's Delight mushroom colony support for TLM normal farm tasks.
+- 为 TLM 普通农场任务添加 Farmer's Delight 蘑菇群落兼容。
+
+- Normal farm maids can plant vanilla red/brown mushrooms on Farmer's Delight rich soil and harvest mature mushroom colonies.
+- 普通农场女仆可以在 Farmer's Delight 沃土上种植原版红/棕蘑菇，并采收成熟蘑菇群落。
+
+- Mushroom colony harvest now distinguishes Farmer's Delight knives from other main-hand tools: knives harvest 3 mushrooms and reset the colony to age 0, while non-knives harvest 5 mushrooms and revert the colony to a vanilla mushroom.
+- 蘑菇群落采收现在区分 Farmer's Delight 刀与其他主手工具：刀采收 3 个蘑菇并把菌落重置为 age 0，非刀采收 5 个蘑菇并把菌落退回原版蘑菇。
+
 ## 0.1.1 - 2026-08-31
 
 ### Added / 新增

@@ -1,7 +1,12 @@
 package io.github.demsum.maidsoulbrewery.mixin.maidsoulkitchen;
 
+import com.github.wallev.maidsoulkitchen.task.cook.drinkbeer.BeerBarrelBlockAccessor;
+import com.github.wallev.maidsoulkitchen.task.cook.common.inventory.MaidRecipesManager;
 import com.mojang.datafixers.util.Pair;
 import java.util.List;
+import lekavar.lma.drinkbeer.blockentities.BeerBarrelBlockEntity;
+import lekavar.lma.drinkbeer.registries.ItemRegistry;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -9,15 +14,22 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(targets = "com.github.wallev.maidsoulkitchen.task.cook.drinkbeer.TaskDbBeerBarrel", remap = false)
 public abstract class TaskDbBeerBarrelInputGuardMixin {
+    private static final int maidsoulbrewery$INGREDIENT_SLOTS = 4;
+    private static final int maidsoulbrewery$CUP_SLOT = 4;
+    private static final int maidsoulbrewery$REQUIRED_CUPS = 4;
+    private static final int maidsoulbrewery$STATUS_IDLE = 0;
+
     @SuppressWarnings("unused")
     public boolean hasInput(Container container) {
-        return maidsoulbrewery$hasIngredientInput(container);
+        return maidsoulbrewery$hasReturnedBucket(container);
     }
 
     @SuppressWarnings("unused")
@@ -32,12 +44,12 @@ public abstract class TaskDbBeerBarrelInputGuardMixin {
         int entries = Math.min(amounts.size(), ingredients.size());
 
         for (int index = 0; index < entries; index++) {
-            int targetSlot = index;
-            if (!maidsoulbrewery$isValidSlot(container, targetSlot)) {
+            if (!maidsoulbrewery$isValidSlot(container, index)) {
                 return;
             }
 
-            int missing = maidsoulbrewery$getMissingAmount(container, targetSlot, amounts.get(index), ingredients.get(index));
+            int required = maidsoulbrewery$getTargetAmount(index, amounts.get(index));
+            int missing = maidsoulbrewery$getMissingAmount(container, index, required, ingredients.get(index));
             if (missing < 0 || !maidsoulbrewery$hasEnoughAvailable(missing, ingredients.get(index))) {
                 return;
             }
@@ -45,7 +57,8 @@ public abstract class TaskDbBeerBarrelInputGuardMixin {
 
         boolean changed = false;
         for (int index = 0; index < entries; index++) {
-            int missing = maidsoulbrewery$getMissingAmount(container, index, amounts.get(index), ingredients.get(index));
+            int required = maidsoulbrewery$getTargetAmount(index, amounts.get(index));
+            int missing = maidsoulbrewery$getMissingAmount(container, index, required, ingredients.get(index));
             if (missing > 0) {
                 maidsoulbrewery$insertAndShrink(container, ingredients.get(index), index, missing);
                 changed = true;
@@ -54,6 +67,55 @@ public abstract class TaskDbBeerBarrelInputGuardMixin {
 
         if (changed) {
             blockEntity.setChanged();
+        }
+    }
+
+    @Inject(
+            method = "maidShouldMoveTo(Lnet/minecraft/server/level/ServerLevel;Lcom/github/tartaricacid/touhoulittlemaid/entity/passive/EntityMaid;Llekavar/lma/drinkbeer/blockentities/BeerBarrelBlockEntity;Lcom/github/wallev/maidsoulkitchen/task/cook/common/inventory/MaidRecipesManager;)Z",
+            at = @At("HEAD"),
+            cancellable = true,
+            remap = false
+    )
+    private void maidsoulbrewery$moveToRefillCups(
+            ServerLevel level,
+            @Coerce Object maid,
+            BeerBarrelBlockEntity barrel,
+            MaidRecipesManager<?> recipesManager,
+            CallbackInfoReturnable<Boolean> callbackInfo
+    ) {
+        Container container = barrel.getBrewingInventory();
+        IItemHandlerModifiable inputInventory = recipesManager.getInputInv();
+        if (maidsoulbrewery$getStatus(barrel) == maidsoulbrewery$STATUS_IDLE
+                && maidsoulbrewery$needsCups(container)
+                && inputInventory != null
+                && maidsoulbrewery$hasEmptyBeerMug(inputInventory)) {
+            callbackInfo.setReturnValue(true);
+        }
+    }
+
+    @Inject(
+            method = "tryInsertItem(Lnet/minecraft/server/level/ServerLevel;Lcom/github/tartaricacid/touhoulittlemaid/entity/passive/EntityMaid;Llekavar/lma/drinkbeer/blockentities/BeerBarrelBlockEntity;Lcom/github/wallev/maidsoulkitchen/task/cook/common/inventory/MaidRecipesManager;)V",
+            at = @At("HEAD"),
+            cancellable = true,
+            remap = false
+    )
+    private void maidsoulbrewery$refillCupsFirst(
+            ServerLevel level,
+            @Coerce Object maid,
+            BeerBarrelBlockEntity barrel,
+            MaidRecipesManager<?> recipesManager,
+            CallbackInfo callbackInfo
+    ) {
+        if (maidsoulbrewery$getStatus(barrel) != maidsoulbrewery$STATUS_IDLE) {
+            return;
+        }
+
+        Container container = barrel.getBrewingInventory();
+        IItemHandlerModifiable inputInventory = recipesManager.getInputInv();
+        if (inputInventory != null && maidsoulbrewery$fillCups(container, inputInventory)) {
+            container.setChanged();
+            barrel.setChanged();
+            callbackInfo.cancel();
         }
     }
 
@@ -69,7 +131,7 @@ public abstract class TaskDbBeerBarrelInputGuardMixin {
             BlockEntity blockEntity,
             CallbackInfo callbackInfo
     ) {
-        int checkedSlots = Math.min(4, container.getContainerSize());
+        int checkedSlots = Math.min(maidsoulbrewery$INGREDIENT_SLOTS, container.getContainerSize());
         for (int slot = 0; slot < checkedSlots; slot++) {
             ItemStack stack = container.getItem(slot);
             if (stack.isEmpty() || !stack.is(Items.BUCKET)) {
@@ -87,10 +149,73 @@ public abstract class TaskDbBeerBarrelInputGuardMixin {
         callbackInfo.cancel();
     }
 
-    private static boolean maidsoulbrewery$hasIngredientInput(Container container) {
-        int checkedSlots = Math.min(4, container.getContainerSize());
+    private static int maidsoulbrewery$getTargetAmount(int targetSlot, int requested) {
+        if (targetSlot >= 0 && targetSlot < maidsoulbrewery$INGREDIENT_SLOTS) {
+            return Math.min(requested, 1);
+        }
+        return requested;
+    }
+
+    private static int maidsoulbrewery$getStatus(BeerBarrelBlockEntity barrel) {
+        return ((BeerBarrelBlockAccessor) barrel).tlmk$statusCode();
+    }
+
+    private static boolean maidsoulbrewery$needsCups(Container container) {
+        if (!maidsoulbrewery$isValidSlot(container, maidsoulbrewery$CUP_SLOT)) {
+            return false;
+        }
+
+        ItemStack cups = container.getItem(maidsoulbrewery$CUP_SLOT);
+        return cups.isEmpty()
+                || cups.is(ItemRegistry.EMPTY_BEER_MUG.get()) && cups.getCount() < maidsoulbrewery$REQUIRED_CUPS;
+    }
+
+    private static boolean maidsoulbrewery$fillCups(Container container, IItemHandlerModifiable source) {
+        if (!maidsoulbrewery$needsCups(container)) {
+            return false;
+        }
+
+        ItemStack cups = container.getItem(maidsoulbrewery$CUP_SLOT);
+        int missing = cups.isEmpty() ? maidsoulbrewery$REQUIRED_CUPS : maidsoulbrewery$REQUIRED_CUPS - cups.getCount();
+        for (int slot = 0; slot < source.getSlots() && missing > 0; slot++) {
+            ItemStack stack = source.getStackInSlot(slot);
+            if (stack.isEmpty() || !stack.is(ItemRegistry.EMPTY_BEER_MUG.get())) {
+                continue;
+            }
+
+            ItemStack extracted = source.extractItem(slot, missing, false);
+            if (extracted.isEmpty()) {
+                continue;
+            }
+
+            ItemStack current = container.getItem(maidsoulbrewery$CUP_SLOT);
+            if (current.isEmpty()) {
+                container.setItem(maidsoulbrewery$CUP_SLOT, extracted.copy());
+            } else {
+                ItemStack merged = current.copy();
+                merged.grow(extracted.getCount());
+                container.setItem(maidsoulbrewery$CUP_SLOT, merged);
+            }
+            missing -= extracted.getCount();
+        }
+
+        return missing < (cups.isEmpty() ? maidsoulbrewery$REQUIRED_CUPS : maidsoulbrewery$REQUIRED_CUPS - cups.getCount());
+    }
+
+    private static boolean maidsoulbrewery$hasEmptyBeerMug(IItemHandlerModifiable source) {
+        for (int slot = 0; slot < source.getSlots(); slot++) {
+            ItemStack stack = source.getStackInSlot(slot);
+            if (!stack.isEmpty() && stack.is(ItemRegistry.EMPTY_BEER_MUG.get())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean maidsoulbrewery$hasReturnedBucket(Container container) {
+        int checkedSlots = Math.min(maidsoulbrewery$INGREDIENT_SLOTS, container.getContainerSize());
         for (int slot = 0; slot < checkedSlots; slot++) {
-            if (!container.getItem(slot).isEmpty()) {
+            if (container.getItem(slot).is(Items.BUCKET)) {
                 return true;
             }
         }

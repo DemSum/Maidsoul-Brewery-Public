@@ -6,7 +6,8 @@
   "mixins": [
     "drinkbeer.BeerBarrelAccessorBridgeMixin",
     "drinkbeer.BeerBarrelMarkDirtyMixin",
-    "maidsoulkitchen.TaskDbBeerBarrelInputGuardMixin"
+    "maidsoulkitchen.TaskDbBeerBarrelInputGuardMixin",
+    "touhoulittlemaid.SpecialCropManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -7,12 +7,13 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 authors="DemSum"
+credits="Original mods by Touhou Little Maid authors, Maidsoul Kitchen by wallev, DrinkBeer Refill by Lekavar and MarbleGateKeeper, Farmer's Delight by vectorwing, and Ratatouille by Forsteri, Thaumstrial, Even, Jelly_Candy."
 displayURL="https://github.com/DemSum/Maidsoul-Brewery"
 issueTrackerURL="https://github.com/DemSum/Maidsoul-Brewery/issues"
 description='''
-Unofficial compatibility patch for Maidsoul Kitchen and DrinkBeer Refill beer barrels.
+Unofficial compatibility patch for Maidsoul Kitchen, DrinkBeer Refill beer barrels, and selected farming behavior.
 
-非官方兼容补丁，用于修复 Maidsoul Kitchen 与 DrinkBeer Refill 啤酒桶任务的兼容问题。
+非官方兼容补丁，用于修复 Maidsoul Kitchen 与 DrinkBeer Refill 啤酒桶任务以及部分作物行为的兼容问题。
 '''
 
 [[mixins]]
@@ -33,6 +34,13 @@ ordering="NONE"
 side="BOTH"
 
 [[dependencies.${mod_id}]]
+modId="touhou_little_maid"
+type="required"
+versionRange="${touhou_little_maid_version_range}"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
 modId="maidsoulkitchen"
 type="required"
 versionRange="${maidsoulkitchen_version_range}"
@@ -50,5 +58,12 @@ side="BOTH"
 modId="kitchenkarrot"
 type="optional"
 versionRange="${kitchenkarrot_version_range}"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="farmersdelight"
+type="optional"
+versionRange="${farmersdelight_version_range}"
 ordering="AFTER"
 side="BOTH"
