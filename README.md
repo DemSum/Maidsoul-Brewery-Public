@@ -30,9 +30,9 @@ The current patch prevents MSK maid beer-barrel tasks from pulling brewing ingre
 
 ## Notes / 说明
 
-Maidsoul Kitchen's shared cooking movement keeps the real cooking block in `TARGET_POS` for interaction, while `WALK_TARGET` points to a reachable cardinal position beside it. A paired in-transit check prevents MSK from discarding this intentional coordinate split before the maid arrives.
+Maidsoul Kitchen's shared cooking movement keeps the real cooking block in `TARGET_POS` for interaction, while `WALK_TARGET` points to a reachable cardinal position beside it. MSK's original invalid-target cleanup remains active; its equality check is extended only for a validated approach/device pair.
 
-Maidsoul Kitchen 通用烹饪移动会继续把真实厨具保存在 `TARGET_POS` 中用于交互，仅让 `WALK_TARGET` 指向同层侧面的可达位置；配套的途中校验会避免 MSK 在女仆抵达前错误清除这组双坐标目标。
+Maidsoul Kitchen 通用烹饪移动会继续把真实厨具保存在 `TARGET_POS` 中用于交互，仅让 `WALK_TARGET` 指向同层侧面的可达位置。MSK 原有的无效目标清理保持生效，只对经过验证的落脚点/设备配对扩展坐标相等判断。
 
 This is not an official Maidsoul Kitchen or DrinkBeer Refill project.
 

@@ -12,6 +12,9 @@
 - Separated Maidsoul Kitchen cooking-device coordinates from walking coordinates. Maids now walk to a reachable cardinal position beside a cooking block while continuing to look at and interact with the real block entity.
 - 分离 Maidsoul Kitchen 烹饪任务的设备坐标与行走坐标。女仆现在会前往厨具同层侧面的可达落脚点，同时继续面向真实方块实体并与之交互。
 
+- Preserved MSK's original in-transit invalid-target cleanup. The patch only extends its coordinate equality check to recognize a validated side-approach/device pair; unrelated or stale walking targets are still cleared by MSK.
+- 保留 MSK 原有的途中无效目标清理，仅扩展其坐标相等判断以识别经过验证的“侧面落脚点/设备”配对；无关或过期的行走目标仍由 MSK 原逻辑清除。
+
 ## 0.2.2 - 2026-09-11
 
 ### Changed / 调整
