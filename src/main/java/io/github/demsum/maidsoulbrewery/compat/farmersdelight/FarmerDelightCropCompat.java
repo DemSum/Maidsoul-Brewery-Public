@@ -3,10 +3,8 @@ package io.github.demsum.maidsoulbrewery.compat.farmersdelight;
 import com.github.tartaricacid.touhoulittlemaid.api.task.ISpecialCropHandler;
 import com.github.tartaricacid.touhoulittlemaid.entity.task.crop.SpecialCropManager;
 import io.github.demsum.maidsoulbrewery.MaidSoulBrewery;
-import java.util.Map;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -22,7 +20,7 @@ public final class FarmerDelightCropCompat {
     private FarmerDelightCropCompat() {
     }
 
-    public static void registerSpecialCropHandlers() {
+    public static void registerSpecialCropHandlers(SpecialCropManager manager) {
         Block richSoil = maidsoulbrewery$getBlock(RICH_SOIL);
         Block brownMushroomColony = maidsoulbrewery$getBlock(BROWN_MUSHROOM_COLONY);
         Block redMushroomColony = maidsoulbrewery$getBlock(RED_MUSHROOM_COLONY);
@@ -35,19 +33,11 @@ public final class FarmerDelightCropCompat {
                 brownMushroomColony,
                 redMushroomColony
         );
-        Map<Item, ISpecialCropHandler> seedHandlers = SpecialCropManager.getItemSeedHandlers();
-        Map<Block, ISpecialCropHandler> cropHandlers = SpecialCropManager.getBlockCropHandlers();
-
-        try {
-            seedHandlers.putIfAbsent(Items.BROWN_MUSHROOM, handler);
-            seedHandlers.putIfAbsent(Items.RED_MUSHROOM, handler);
-            cropHandlers.putIfAbsent(richSoil, handler);
-            cropHandlers.putIfAbsent(brownMushroomColony, handler);
-            cropHandlers.putIfAbsent(redMushroomColony, handler);
-        } catch (UnsupportedOperationException exception) {
-            MaidSoulBrewery.LOGGER.warn("Skipped Farmer's Delight mushroom colony crop handlers because TLM crop handlers are already frozen");
-            return;
-        }
+        manager.addSeed(Items.BROWN_MUSHROOM, handler);
+        manager.addSeed(Items.RED_MUSHROOM, handler);
+        manager.addCrop(richSoil, handler);
+        manager.addCrop(brownMushroomColony, handler);
+        manager.addCrop(redMushroomColony, handler);
 
         MaidSoulBrewery.LOGGER.debug("Registered Farmer's Delight mushroom colony crop handlers");
     }

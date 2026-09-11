@@ -74,10 +74,14 @@ dependencies {
     compileOnly files("../maid_sophi/old/1.21.1/touhoulittlemaid-1.5.3-neoforge+mc1.21.1.jar")
     compileOnly files("../1.21/maidsoulkitchen-1.21.1-beta-v0.1.4.jar")
     compileOnly files("../1.21/drinkbeer-refill-1.21.1-neoforge-1.4.1+neoforge.jar")
+    compileOnly files("../1.21/kaleidoscopecookery-1.4.1-neoforge+mc1.21.1.jar")
 
     localRuntime files("../maid_sophi/old/1.21.1/touhoulittlemaid-1.5.3-neoforge+mc1.21.1.jar")
     localRuntime files("../1.21/maidsoulkitchen-1.21.1-beta-v0.1.4.jar")
     localRuntime files("../1.21/drinkbeer-refill-1.21.1-neoforge-1.4.1+neoforge.jar")
+    if (providers.gradleProperty("includeKaleidoscopeCookeryRuntime").getOrElse("true").toBoolean()) {
+        localRuntime files("../1.21/kaleidoscopecookery-1.4.1-neoforge+mc1.21.1.jar")
+    }
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
@@ -96,6 +100,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             drinkbeer_version_range    : drinkbeer_version_range,
             kitchenkarrot_version_range: kitchenkarrot_version_range,
             farmersdelight_version_range: farmersdelight_version_range,
+            kaleidoscope_cookery_version_range: kaleidoscope_cookery_version_range,
     ]
     inputs.properties replaceProperties
     expand replaceProperties

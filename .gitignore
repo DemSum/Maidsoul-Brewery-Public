@@ -41,3 +41,6 @@ repo/
 
 ### Local logs ###
 *.log
+
+### Local research ###
+/调研报告/
