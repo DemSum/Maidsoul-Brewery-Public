@@ -6,6 +6,8 @@
   "mixins": [
     "drinkbeer.BeerBarrelAccessorBridgeMixin",
     "drinkbeer.BeerBarrelMarkDirtyMixin",
+    "maidsoulkitchen.MaidCookMakeTaskSideApproachMixin",
+    "maidsoulkitchen.MaidCookMoveTaskSideApproachMixin",
     "maidsoulkitchen.TaskBerryFarmPathReachMixin",
     "maidsoulkitchen.TaskDbBeerBarrelInputGuardMixin"
   ],

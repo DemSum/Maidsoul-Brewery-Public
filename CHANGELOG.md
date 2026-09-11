@@ -1,5 +1,17 @@
 # Changelog / 更新日志
 
+## Unreleased / 未发布
+
+### Changed / 调整
+
+- Reworked Maidsoul Kitchen's shared cooking-device search around one TLM BFS pass. Reachable standing positions are evaluated first and each adjacent cooking device is fully checked at most once per pass.
+- 重构 Maidsoul Kitchen 通用厨具搜索：每轮只运行一次 TLM BFS，先遍历可达落脚点，并保证每个相邻厨具每轮至多进行一次完整检查。
+
+### Fixed / 修复
+
+- Separated Maidsoul Kitchen cooking-device coordinates from walking coordinates. Maids now walk to a reachable cardinal position beside a cooking block while continuing to look at and interact with the real block entity.
+- 分离 Maidsoul Kitchen 烹饪任务的设备坐标与行走坐标。女仆现在会前往厨具同层侧面的可达落脚点，同时继续面向真实方块实体并与之交互。
+
 ## 0.2.2 - 2026-09-11
 
 ### Changed / 调整
