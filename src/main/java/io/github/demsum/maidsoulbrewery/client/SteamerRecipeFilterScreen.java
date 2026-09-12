@@ -5,18 +5,23 @@ import com.github.tartaricacid.touhoulittlemaid.client.gui.widget.button.TouhouS
 import com.github.wallev.maidsoulkitchen.client.gui.entity.maid.MaidTaskConfigGui;
 import com.github.wallev.maidsoulkitchen.client.gui.widget.button.TaskInfoButton;
 import com.github.wallev.maidsoulkitchen.client.gui.widget.button.TypeButton;
+import com.github.wallev.maidsoulkitchen.entity.data.inner.task.CookData;
+import com.github.wallev.maidsoulkitchen.inventory.tooltip.AmountTooltip;
 import io.github.demsum.maidsoulbrewery.menu.SteamerRecipeFilterMenu;
 import io.github.demsum.maidsoulbrewery.network.SetSteamerFilterPayload;
 import io.github.demsum.maidsoulbrewery.recipe.RecipeFilterData;
 import io.github.demsum.maidsoulbrewery.recipe.RecipeOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -77,10 +82,31 @@ public final class SteamerRecipeFilterScreen extends MaidTaskConfigGui<SteamerRe
         super.renderTooltip(graphics, mouseX, mouseY);
         for (RecipeButton button : recipeButtons) {
             if (button.isHovered()) {
-                graphics.renderTooltip(font, button.recipe().result(), mouseX, mouseY);
+                ItemStack result = button.recipe().result();
+                List<Component> text = Screen.getTooltipFromItem(minecraft, result);
+                Optional<TooltipComponent> details = Optional.of(createAmountTooltip(button.recipe()));
+                graphics.renderTooltip(font, text, details, result, mouseX, mouseY);
                 return;
             }
         }
+    }
+
+    private AmountTooltip createAmountTooltip(RecipeOption recipe) {
+        String mode = filterData.mode() == RecipeFilterData.Mode.WHITELIST
+                ? CookData.Mode.WHITELIST.name
+                : CookData.Mode.BLACKLIST.name;
+        CookData cookData = new CookData(
+                mode,
+                filterData.whitelist().stream().map(ResourceLocation::toString).toList(),
+                filterData.blacklist().stream().map(ResourceLocation::toString).toList()
+        );
+        return new AmountTooltip(
+                recipe.id().toString(),
+                recipe.ingredients(),
+                filterData.mode() == RecipeFilterData.Mode.BLACKLIST,
+                false,
+                cookData
+        );
     }
 
     @Override

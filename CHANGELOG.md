@@ -9,6 +9,9 @@
 
 ### Fixed / 修复
 
+- Fixed steamer whitelist/blacklist updates by applying the validated payload on the server thread without rejecting it during transient task-state changes. Recipe hover tooltips now match Maidsoul Kitchen by showing the current mode, whether the recipe is cookable, and its ingredient.
+- 修复蒸笼黑白名单更新：经过校验的数据包现在于服务端主线程写入，不再因任务状态短暂变化而误拒绝。配方悬浮提示也与 Maidsoul Kitchen 对齐，显示当前模式、配方是否可烹饪及所需原料。
+
 - Separated Maidsoul Kitchen cooking-device coordinates from walking coordinates. Maids now walk to a reachable cardinal position beside a cooking block while continuing to look at and interact with the real block entity.
 - 分离 Maidsoul Kitchen 烹饪任务的设备坐标与行走坐标。女仆现在会前往厨具同层侧面的可达落脚点，同时继续面向真实方块实体并与之交互。
 

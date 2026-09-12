@@ -201,7 +201,11 @@ public final class SteamerAdapter {
 
     public static List<RecipeOption> getRecipeOptions(Level level) {
         return level.getRecipeManager().getAllRecipesFor(ModRecipes.STEAMER_RECIPE).stream()
-                .map(recipe -> new RecipeOption(recipe.id(), recipe.value().getResult()))
+                .map(recipe -> new RecipeOption(
+                        recipe.id(),
+                        recipe.value().getResult(),
+                        List.of(recipe.value().getIngredient())
+                ))
                 .sorted(java.util.Comparator.comparing(RecipeOption::id))
                 .toList();
     }

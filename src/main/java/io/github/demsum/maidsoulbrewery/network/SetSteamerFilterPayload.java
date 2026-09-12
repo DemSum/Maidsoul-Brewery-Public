@@ -15,6 +15,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public record SetSteamerFilterPayload(int maidId, RecipeFilterData filter) implements CustomPacketPayload {
@@ -64,11 +65,19 @@ public record SetSteamerFilterPayload(int maidId, RecipeFilterData filter) imple
     }
 
     public static void handle(SetSteamerFilterPayload payload, IPayloadContext context) {
-        Player player = context.player();
-        Entity entity = player.level().getEntity(payload.maidId());
+        if (!context.flow().isServerbound()) {
+            return;
+        }
+        context.enqueueWork(() -> apply(payload, context.player()));
+    }
+
+    private static void apply(SetSteamerFilterPayload payload, Player player) {
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+        Entity entity = serverPlayer.level().getEntity(payload.maidId());
         if (!(entity instanceof EntityMaid maid)
-                || !maid.isOwnedBy(player)
-                || !RecipeFilterDataKeys.STEAMER_TASK_ID.equals(maid.getTask().getUid())) {
+                || !maid.isOwnedBy(serverPlayer)) {
             return;
         }
 
