@@ -76,7 +76,7 @@ public final class SteamerAdapter {
                 steamer.getBlockPos(),
                 isAccessible(steamer, level),
                 hasCoveredTop(steamer, level),
-                steamer.hasHeatSource(level),
+                hasEffectiveHeat(steamer, level),
                 items,
                 progress,
                 times
@@ -281,6 +281,23 @@ public final class SteamerAdapter {
                 return state.hasProperty(SteamerBlock.HAS_LID) && state.getValue(SteamerBlock.HAS_LID);
             }
             cursor = above;
+        }
+        return false;
+    }
+
+    private static boolean hasEffectiveHeat(SteamerBlockEntity steamer, Level level) {
+        SteamerBlockEntity current = steamer;
+        for (int distance = 0; distance < SteamerBlockEntity.MAX_LIT_LEVEL; distance++) {
+            if (current.hasHeatSource(level)) {
+                return true;
+            }
+
+            BlockEntity below = level.getBlockEntity(current.getBlockPos().below());
+            if (!(below instanceof SteamerBlockEntity belowSteamer)
+                    || belowSteamer.getBlockState().getValue(SteamerBlock.HALF)) {
+                return false;
+            }
+            current = belowSteamer;
         }
         return false;
     }

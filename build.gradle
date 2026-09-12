@@ -71,12 +71,12 @@ configurations {
 }
 
 dependencies {
-    compileOnly files("../maid_sophi/old/1.21.1/touhoulittlemaid-1.5.3-neoforge+mc1.21.1.jar")
+    compileOnly files("../1.21/touhoulittlemaid-1.5.3-neoforge+mc1.21.1.jar")
     compileOnly files("../1.21/maidsoulkitchen-1.21.1-beta-v0.1.4.jar")
     compileOnly files("../1.21/drinkbeer-refill-1.21.1-neoforge-1.4.1+neoforge.jar")
     compileOnly files("../1.21/kaleidoscopecookery-1.4.1-neoforge+mc1.21.1.jar")
 
-    localRuntime files("../maid_sophi/old/1.21.1/touhoulittlemaid-1.5.3-neoforge+mc1.21.1.jar")
+    localRuntime files("../1.21/touhoulittlemaid-1.5.3-neoforge+mc1.21.1.jar")
     localRuntime files("../1.21/maidsoulkitchen-1.21.1-beta-v0.1.4.jar")
     localRuntime files("../1.21/drinkbeer-refill-1.21.1-neoforge-1.4.1+neoforge.jar")
     if (providers.gradleProperty("includeKaleidoscopeCookeryRuntime").getOrElse("true").toBoolean()) {

@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 final class MaidSteamerMoveTask extends MaidMoveToBlockTask {
     private static final float MOVEMENT_SPEED = 0.6F;
-    private static final int[] INTERACTION_HEIGHT_OFFSETS = {0, 1, -1, 2, -2};
+    private static final int[] INTERACTION_HEIGHT_OFFSETS = {0, 1, -1, 2, -2, 3, -3};
 
     private BlockPos currentSteamerPos;
 

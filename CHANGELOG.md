@@ -15,6 +15,9 @@
 - Preserved MSK's original in-transit invalid-target cleanup. The patch only extends its coordinate equality check to recognize a validated side-approach/device pair; unrelated or stale walking targets are still cleared by MSK.
 - 保留 MSK 原有的途中无效目标清理，仅扩展其坐标相等判断以识别经过验证的“侧面落脚点/设备”配对；无关或过期的行走目标仍由 MSK 原逻辑清除。
 
+- Fixed prepared steamer stacks being treated as usable only on the directly heated bottom layer. Maid inspection now follows Kaleidoscope Cookery's four-level heat propagation and searches the full reachable height of a four-layer stack.
+- 修复已封盖蒸笼堆叠只有直接接触热源的第一层会被视为可用的问题。女仆检查现在遵循森罗厨房的四层热量传递规则，并覆盖四层蒸笼堆叠的完整可交互高度。
+
 ## 0.2.2 - 2026-09-11
 
 ### Changed / 调整
